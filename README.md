@@ -15,3 +15,8 @@ Code for the Paper "Superpixel Contracted Graph-Based Learning for Hyperspectral
 
 6. "main_clean.py" and "main.py" are the main files with "main_clean.py" being a cleaner written version but "main.py" contains more detailed comments.  
 
+
+
+# Problems
+
+If you are having any problems with the code, or I have made a mistake in the readme section, please feel free to email me at ps644@cam.ac.uk
