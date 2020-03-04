@@ -103,13 +103,14 @@ for t_i in range(run_n):
    pro_class = pd.produce_classification(v_2_labels,labels,ground_truth)
    final = time.time()    
   
+   # I.E Remove the training set from the ground truth to not unfairly count them twice
    adjusted_ground_truth = np.copy(ground_truth)
    for i in range(labels.shape[0]):
        for j in range(labels.shape[1]):
            if(sparse_ground_truth[i,j] > 0):
                adjusted_ground_truth[i,j] = 0
           
-  
+   ## Calculation Performance Metrices 
    pro_class_nb = np.copy(pro_class)
    pro_class_nb = pro_class_nb[np.where(adjusted_ground_truth  > 0)] 
    ground_truth_nb = adjusted_ground_truth[adjusted_ground_truth > 0]
@@ -129,8 +130,7 @@ print(time.time() - start_1)
 print("Total time", time.time() - time_1)
 
 
-## Store Performance Metrics
-
+## Store Performance Metrics for All Runs
 performance_metrics = np.zeros((np.amax(ground_truth)+3,2))
 performance_metrics[:no_class,0] = np.average(CA_store,axis=1)
 performance_metrics[:no_class,1] = np.std(CA_store,axis=1)
@@ -141,7 +141,6 @@ performance_metrics[no_class+1,1] = np.std(performance_metrics[:no_class,0])
 performance_metrics[no_class+2,0] = np.average(Kappa_store)
 performance_metrics[no_class+2,1] = np.std(Kappa_store)
 performance_metrics = performance_metrics * 100
-
 print("Overall Accuracy", performance_metrics[no_class,0], performance_metrics[no_class,1])
     
 

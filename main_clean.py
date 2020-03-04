@@ -82,6 +82,7 @@ for t_i in range(run_n):
    [final_accuracy_v_2,final_coverage,final_pixel_number] = pd.initial_accuracy_assessment(ground_truth,hms.Labels,v_2_labels)  
    pro_class = pd.produce_classification(v_2_labels,labels,ground_truth)    
   
+   # I.E Remove the training set from the ground truth to not unfairly count them twice
    adjusted_ground_truth = np.copy(ground_truth)
    for i in range(labels.shape[0]):
        for j in range(labels.shape[1]):
