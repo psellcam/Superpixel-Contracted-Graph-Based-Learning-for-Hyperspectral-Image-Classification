@@ -1,6 +1,22 @@
 # Superpixel-Contracted-Graph-Based-Learning-for-Hyperspectral-Image-Classification
 Code for the Paper "Superpixel Contracted Graph-Based Learning for Hyperspectral Image Classification"
 
+If you use this code please cite:
+Philip Sellars, Angelica I. Aviles-Rivero, and Carola-Bibiane Schönlieb.
+Superpixel contracted graph-based learning for hyperspectral image classification.
+IEEE Transactions on Geoscience and Remote Sensing (2020).
+
+-
+Or put it in bib format
+@article{sellars2020superpixel,
+  title={Superpixel contracted graph-based learning for hyperspectral image classification},
+  author={Sellars, Philip and Aviles-Rivero, Angelica I and Sch{\"o}nlieb, Carola-Bibiane},
+  journal={IEEE Transactions on Geoscience and Remote Sensing},
+  year={2020},
+  publisher={IEEE}
+}
+
+
 #Instructions for Using the Code 
 
 1. Download all the files in the GitHub
