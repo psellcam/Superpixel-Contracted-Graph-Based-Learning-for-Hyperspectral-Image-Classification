@@ -6,8 +6,8 @@ Philip Sellars, Angelica I. Aviles-Rivero, and Carola-Bibiane Schönlieb.
 Superpixel contracted graph-based learning for hyperspectral image classification.
 IEEE Transactions on Geoscience and Remote Sensing (2020).
 
--
-Or put it in bib format
+
+Or bib format
 @article{sellars2020superpixel,
   title={Superpixel contracted graph-based learning for hyperspectral image classification},
   author={Sellars, Philip and Aviles-Rivero, Angelica I and Sch{\"o}nlieb, Carola-Bibiane},
