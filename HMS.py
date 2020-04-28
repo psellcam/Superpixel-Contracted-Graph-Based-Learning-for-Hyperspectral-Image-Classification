@@ -14,7 +14,7 @@ import HMSCython
 class HMSProcessor(object):    
         
     # Initialisation function
-    def __init__(self,image,lcmr_m,k,m,a_1,a_2):         
+    def __init__(self,image,lcmr_m,k,m,a_1,a_2,mc):         
         
         # Reads in the image
         self.ImageReading(image)
@@ -33,6 +33,7 @@ class HMSProcessor(object):
         self.ratio = 0
         self.splitting_threshold = 0.5  
         self.lcmr = lcmr_m
+        self.mc = mc
         
         ## Whilst not used in the paper you can weight the two spectral distances. 
         self.a_1 = a_1
@@ -320,7 +321,9 @@ class HMSProcessor(object):
         gridStep = int(self.GridStep)+1
         compactness = float(self.Compactness)      
          
-        [self.Labels,self.Distances] = np.asarray(HMSCython.assign_clusters_cython(imageGrid,gridStep,cluster_number,distanceArray,clusterPositions,clusterColours,clusterLCMR,clusterScales,compactness,self.lcmr,self.a_1,self.a_2))
+        self.Labels,self.Distances = HMSCython.assign_clusters_cython(imageGrid,gridStep,cluster_number,distanceArray,clusterPositions,clusterColours,clusterLCMR,clusterScales,compactness,self.lcmr,self.a_1,self.a_2)
+        self.Labels = np.asarray(self.Labels)
+        self.Distances = np.asarray(self.Distances)        
         self.Labels = self.Labels.astype(int)      
 
 
@@ -368,7 +371,9 @@ class HMSProcessor(object):
         # Prevent residual error being calculated for the possible update after connectivity            
         elif(self.Clusters[0,3] == 0):
             # The updated cluster information is stored in the kvector_info. In the form h,w,L,a,b
-            [kvector_info,kvector_lcmr] = np.asarray(HMSCython.update_cluster_cython(self.ImageArray,self.lcmr,self.Labels,self.ClusterNumber,self.Areas))                       
+            kvector_info,kvector_lcmr = HMSCython.update_cluster_cython(self.ImageArray,self.lcmr,self.Labels,self.ClusterNumber,self.Areas)
+            kvector_info = np.asarray(kvector_info)     
+            kvector_lcmr = np.asarray(kvector_lcmr)                  
             # Updates the position colour and area 
             for i in range(self.ClusterNumber):                                 
                     self.Clusters[i,:(3+self.Bands)] = kvector_info[:,i]     
@@ -413,7 +418,7 @@ class HMSProcessor(object):
             #Main loop.            
             self.scaling_calculation()
 
-            if(self.iter > 0):                
+            if(self.iter > 0 and self.mc):                
                 self.splitting_cells()                 
                 self.merging_cells()
                 

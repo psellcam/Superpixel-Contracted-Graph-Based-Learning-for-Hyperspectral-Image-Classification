@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 # %% Start of the main code
 ### Load Hyperspectral Data and Ground Truth
 ### Different names are Indian, Salinas and PaviaU
-name = 'Indian'
+name = 'PaviaU'
 print("Importing the ", name, " dataset")
 [spectral_original,ground_truth] = data_analysis.loading_hyperspectral(name)
 no_class = np.max(ground_truth)
@@ -33,12 +33,11 @@ print("PCA Performed")
 ### LCMR Matrix Construction
 spectral_mnf = lcmr.dimensional_reduction_mnf(spectral_original,20)
 lcmr_matrices = lcmr.create_logm_matrices(spectral_mnf,25,400)
-print("LCMR Constructed")
-      
+print("LCMR Constructed")     
 ### HMS Over-segmentation
 ### K for Indian Pines = 1200 Salinas = 1500 Pavia Uni = 2400
 ### Construct class object
-hms = HMS.HMSProcessor(image = spectral_data_pca,lcmr_m = lcmr_matrices, k=1200, m = 4, a_1 = 0.5, a_2 = 0.5)
+hms = HMS.HMSProcessor(image = spectral_data_pca,lcmr_m = lcmr_matrices, k=30, m = 4, a_1 = 0.5, a_2 = 0.5,mc=True)
 ### Extract labels
 labels = hms.main_work_flow()
 print("Segmentation Labels Extracted")
@@ -55,7 +54,7 @@ pro_class_max = np.zeros(ground_truth.shape)
 OA_max = 0
 for t_i in range(run_n):      
    #### Extract sparse ground truth and the initial cluster labels
-   sparse_ground_truth = pd.sparseness_operator(ground_truth,10,hms,spectral_original)
+   sparse_ground_truth = pd.sparseness_operator(ground_truth,40,hms,spectral_original)
    [node_probs, node_labels] = pd.node_label_initialisation(sparse_ground_truth,hms)    
   
    #### Get sparse mean and weighted feature vectors from the PCA reduced components
