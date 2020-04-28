@@ -48,7 +48,7 @@ print("Time to produce covariance matrices",final-start)
 print("Time to over-segment using HMS", end =" ")
 start = time.time()
 #### k Indian Pines 1200 Salinas 1500 Pavia Uni 2400
-hms = HMS.HMSProcessor(image = spectral_data_pca,lcmr_m = lcmr_matrices, k=1200, m = 4, a_1 = 0.5, a_2 = 0.5)
+hms = HMS.HMSProcessor(image = spectral_data_pca,lcmr_m = lcmr_matrices, k=1200, m = 4, a_1 = 0.5, a_2 = 0.5,mc=True)
 labels = hms.main_work_flow()
 final = time.time()
 print(final-start)
