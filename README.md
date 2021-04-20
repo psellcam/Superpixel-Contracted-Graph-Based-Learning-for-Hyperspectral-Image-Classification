@@ -29,9 +29,13 @@ Or bib format
 
 5. The file "data_analysis.py" contains the loading instructions for these datasets. Please make sure to save the datasets in folders titled "Salinas"  "PaviaUni" and "Indiana" respectively. As an alternative feel free to change the loading function to something else.
 
-6. "main_clean.py" and "main.py" are the main files with "main_clean.py" being a cleaner written version but "main.py" contains more detailed comments.  Just run them with python main_clean.py or python main.py
+6. Command line arguments selecting the dataset, the number of labelled points and other arguments are available in the file cli.py.
+
+7. To run the program please use python main.py
 
 
+# Python Version
+This version was ran with python 3.7.9
 
 # Problems
 
