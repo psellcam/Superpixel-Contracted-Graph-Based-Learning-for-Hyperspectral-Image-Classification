@@ -14,7 +14,7 @@ import HMSCython
 class HMSProcessor(object):    
         
     # Initialisation function
-    def __init__(self,image,lcmr_m,k,m,a_1,a_2,mc):         
+    def __init__(self,image,lcmr_m,k,m,mc):         
         
         # Reads in the image
         self.ImageReading(image)
@@ -36,8 +36,8 @@ class HMSProcessor(object):
         self.mc = mc
         
         ## Whilst not used in the paper you can weight the two spectral distances. 
-        self.a_1 = a_1
-        self.a_2 = a_2
+        self.a_1 = 0.5
+        self.a_2 = 0.5
         
         # Arrays to store the labels and distances used in assignemnt and update steps
         self.Labels = -1*np.ones((self.Height, self.Width),dtype=int)        
