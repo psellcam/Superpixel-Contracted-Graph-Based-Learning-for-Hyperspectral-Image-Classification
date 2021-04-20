@@ -21,7 +21,13 @@ Or bib format
 
 1. Download all the files in the GitHub
 
-2. Create a Python Environment with the relevalant modules. From a fresh empty conda enviroment (python version 3.9.4) you will need to install numpy,cython,scipy,scikit-learn,numexpr and matplotlib.
+2. Create a Python Environment with the relevalant modules. From a fresh empty conda enviroment (python version 3.9.4) you will need to install:
+  ----- numpy
+  ----- cython
+  ----- scipy
+  ----- scikit-learn
+  ----- numexpr
+  ----- matplotlib.
 
 3. In your terminal run "python setup.py build_ext --inplace". This will compile the three Cython files "HMSCython.pyx", "lcmr_cython.pyx" and "graph.pyx".
 
