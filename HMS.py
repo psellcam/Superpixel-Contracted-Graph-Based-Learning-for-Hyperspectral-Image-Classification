@@ -306,9 +306,9 @@ class HMSProcessor(object):
         
         # Creates array structures for the clusters for use in the Cython code
         clusterColours = np.zeros((self.ClusterNumber,self.Bands))
-        clusterPositions = np.zeros((self.ClusterNumber,2),dtype=int)
+        clusterPositions = np.zeros((self.ClusterNumber,2))
         clusterScales = np.ascontiguousarray(self.Clusters[:,3+self.Bands])
-        clusterPositions = np.ascontiguousarray(self.Clusters[:,0:2],dtype=int)
+        clusterPositions = np.ascontiguousarray(self.Clusters[:,0:2])
         clusterColours = np.ascontiguousarray(self.Clusters[:,2:(2+self.Bands)])
         clusterLCMR = np.ascontiguousarray(self.ClustersLCMR)
         

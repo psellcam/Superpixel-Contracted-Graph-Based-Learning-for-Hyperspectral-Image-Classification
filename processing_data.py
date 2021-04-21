@@ -24,7 +24,7 @@ def sparseness_operator(ground_truth,number_of_samples,hms,spectral_original):
     number_of_classes = np.amax(ground_truth)
     for i in range(number_of_classes):
         index = np.where(sparse_ground_truth == i+1)[0]
-        if(index.shape[0] < number_of_samples):
+        if(index.shape[0] <= number_of_samples):
             index = np.random.choice(index,index.shape[0],replace = False)
         else:
             index = np.random.choice(index,index.shape[0] - number_of_samples,replace = False)

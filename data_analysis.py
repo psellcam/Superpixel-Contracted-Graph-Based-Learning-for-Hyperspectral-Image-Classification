@@ -29,7 +29,7 @@ def loading_hyperspectral(name):
         os.chdir(current_path)       
         return spectral_data , ground_truth
     
-    if(name == 'Indian'):
+    if(name == 'Indiana'):
         
         # Go and get the spectral data and ground truth
         current_path = os.getcwd()

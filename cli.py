@@ -2,8 +2,8 @@ import argparse
 
 def create_parser():
     parser = argparse.ArgumentParser(description='Command Line Arguments')
-    parser.add_argument('--dataset', default='Indian', type=str,
-                        choices=['Indian', 'PaviaU' , 'Salinas'],
+    parser.add_argument('--dataset', default='Indiana', type=str,
+                        choices=['Indiana', 'PaviaU' , 'Salinas'],
                         help='dataset name')
     parser.add_argument('--pca-v', '--pca-variance', default=0.998, type=float,
                         help='explained variance required via pca')

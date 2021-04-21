@@ -13,13 +13,13 @@ from libc.stdio cimport printf
 def create_distance_matrix(double[:,::1] cluster_positions):
     
     # get dimensions
-    cdef Py_ssize_t cluster_number
+    cdef int cluster_number
     cluster_number = cluster_positions.shape[0]
 
     # neighborhood arrays
     cdef double[:,::1] distances = np.zeros((cluster_number,cluster_number))    
     cdef double x_d , y_d
-    cdef Py_ssize_t i,j
+    cdef int i,j
     cdef double distance_mag 
   
     with nogil:

@@ -23,7 +23,7 @@ import cli
  
 
 args = cli.parse_commandline_args()
-if args.dataset == "Indian":
+if args.dataset == "Indiana":
     args.k = 1200
     args.b = random.uniform(0.89,0.9) 
     args.gamma = 10**random.uniform(-0.8,-0.6)  
@@ -84,6 +84,7 @@ print("Feature Extraction and Graph Classification", end =" ")
 start_1 = time.time()
 pro_class_max = np.zeros(ground_truth.shape)
 OA_max = 0
+
 for t_i in range(args.run_n):      
     ### Extract sparse ground truth and the initial cluster labels
     sparse_ground_truth = pd.sparseness_operator(ground_truth,args.num_labeled,hms,spectral_original)
@@ -155,25 +156,4 @@ performance_metrics = performance_metrics * 100
 
 mean = "{:,.2f}".format(performance_metrics[no_class,0])
 std = "{:,.2f}".format(performance_metrics[no_class,1])
-print("Overall Accuracy",mean,"+-",std,"%")
-    
-
-
-## Extra Code for Saving images
-
-#imgColor = spectral_original[:,:,[39 ,28 ,12]]
-#imgColor = 255*(imgColor - np.amin(imgColor)) / (np.amax(imgColor)-np.amin(imgColor))
-#imgColor = imgColor.astype(np.uint8)
-#plt.imsave("pavia_colour.png",imgColor)
-
-#from skimage.segmentation import mark_boundaries
-#image_with_boundaries = mark_boundaries(imgColor,labels)
-#plt.imsave('pavia_boundaries.png',image_with_boundaries)
-
-
-# imgMean = np.zeros((imgColor.shape))
-# for i in range(np.amax(labels)):
-#     colour_group = imgColor[np.where(labels == i)]
-#     imgMean[np.where(labels == i)] = np.average(colour_group,axis=0)
-#     imgMean = imgMean.astype(int)
-# plt.imsave("pavia_mean_2400.png",imgMean)
+print("Overall Accuracy",mean,"+-",std,"%")    

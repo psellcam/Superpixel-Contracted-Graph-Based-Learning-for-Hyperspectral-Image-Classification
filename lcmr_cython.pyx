@@ -154,7 +154,7 @@ def cylog(np.ndarray[double, ndim=2] a):
     out = np.empty((a.shape[0],a.shape[1]), dtype=a.dtype)
     cdef double [:, :] out_view = out
     
-    cdef Py_ssize_t i,j
+    cdef int i,j
     cdef double store
     with nogil:
         for i in prange(a.shape[0]):

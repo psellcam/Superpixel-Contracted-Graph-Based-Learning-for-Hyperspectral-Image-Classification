@@ -10,7 +10,7 @@ from libc.math cimport round
 from libc.stdio cimport printf
 
 @cython.boundscheck(False)
-def connectivity_cython(Py_ssize_t[:,::1] segments,Py_ssize_t min_size, Py_ssize_t max_size):
+def connectivity_cython(long[:,::1] segments,int min_size, int max_size):
     """ Helper function to remove small disconnected regions from the labels
     Parameters
     ----------
@@ -28,30 +28,30 @@ def connectivity_cython(Py_ssize_t[:,::1] segments,Py_ssize_t min_size, Py_ssize
     """
 
     # get image dimensions
-    cdef Py_ssize_t height, width
+    cdef int height, width
     height = segments.shape[0]
     width = segments.shape[1]
 
     # neighborhood arrays
-    cdef Py_ssize_t[::1] ddx = np.array((1, -1, 0, 0), dtype=np.intp)
-    cdef Py_ssize_t[::1] ddy = np.array((0, 0, 1, -1), dtype=np.intp)
+    cdef long[::1] ddx = np.array((1, -1, 0, 0), dtype=int)
+    cdef long[::1] ddy = np.array((0, 0, 1, -1), dtype=int)
     
     # new object with connected segments initialized to -1
-    cdef Py_ssize_t[:, ::1] connected_segments = -1 * np.ones_like(segments, dtype=np.intp)
+    cdef long[:, ::1] connected_segments = -1 * np.ones_like(segments, dtype=int)
 
-    cdef Py_ssize_t current_new_label = 0
-    cdef Py_ssize_t label = 0
+    cdef int current_new_label = 0
+    cdef int label = 0
 
     # variables for the breadth first search
-    cdef Py_ssize_t current_segment_size = 1
-    cdef Py_ssize_t bfs_visited = 0
-    cdef Py_ssize_t adjacent
+    cdef int current_segment_size = 1
+    cdef int bfs_visited = 0
+    cdef int adjacent
 
-    cdef Py_ssize_t yy, xx
+    cdef int yy, xx
 
-    cdef Py_ssize_t[:, ::1] coord_list = np.zeros((max_size, 2), dtype=np.intp)
+    cdef long[:, ::1] coord_list = np.zeros((max_size, 2), dtype=int)
     
-    cdef Py_ssize_t i,x,y
+    cdef int i,x,y
   
     with nogil:
         for y in range(height):
@@ -97,15 +97,13 @@ def connectivity_cython(Py_ssize_t[:,::1] segments,Py_ssize_t min_size, Py_ssize
     return np.asarray(connected_segments)
 
 @cython.boundscheck(False)
-def assign_clusters_cython(double[:, :, ::1] imageGrid, Py_ssize_t gridStep, Py_ssize_t cluster_number,
-                           double[:,::1] distanceArray, Py_ssize_t[:,::1] clusterPositions, double[:,::1] clusterColours, 
+def assign_clusters_cython(double[:, :, ::1] imageGrid, int gridStep, int cluster_number,
+                           double[:,::1] distanceArray, double[:,::1] clusterPositions, double[:,::1] clusterColours, 
                            double[:,:,::1] clusterLCMR, double [::1] clusterScale, double compactness, double[:,:,:,::1] lcmr, double a_1, double a_2):    
     
-    cdef Py_ssize_t i,c,h,w,h_min,h_max,w_min,w_max,height, weight,bands,lcmr_bands,ii,jj
+    cdef int i,c,h,w,h_min,h_max,w_min,w_max,height, weight,bands,lcmr_bands,ii,jj
     cdef double Dc,Ds,D,ch,cw,dh,dw,D_lcmr
-    cdef int adaptiveGridStep
-    
-       
+    cdef int adaptiveGridStep      
     
     height = imageGrid.shape[0]
     width = imageGrid.shape[1]
@@ -116,7 +114,7 @@ def assign_clusters_cython(double[:, :, ::1] imageGrid, Py_ssize_t gridStep, Py_
     
     
     # Storing the labels
-    cdef Py_ssize_t[:,::1] labels = -1*np.ones((height,width),dtype = np.int)
+    cdef long[:,::1] labels = -1*np.ones((height,width),dtype='int')
     
     with nogil:       
         for i in range(cluster_number):
@@ -125,10 +123,10 @@ def assign_clusters_cython(double[:, :, ::1] imageGrid, Py_ssize_t gridStep, Py_
             cw = clusterPositions[i,1]
                                
             adaptiveGridStep =  int(round(clusterScale[i]*gridStep))                
-            h_min = <Py_ssize_t>max(ch - adaptiveGridStep, 0)
-            h_max = <Py_ssize_t>min(ch + adaptiveGridStep + 1, height)
-            w_min = <Py_ssize_t>max(cw - adaptiveGridStep, 0)
-            w_max = <Py_ssize_t>min(cw + adaptiveGridStep + 1, width)      
+            h_min = <int>max(ch - adaptiveGridStep, 0)
+            h_max = <int>min(ch + adaptiveGridStep + 1, height)
+            w_min = <int>max(cw - adaptiveGridStep, 0)
+            w_max = <int>min(cw + adaptiveGridStep + 1, width)      
                     
                     
             for h in range(h_min,h_max):
@@ -160,19 +158,19 @@ def assign_clusters_cython(double[:, :, ::1] imageGrid, Py_ssize_t gridStep, Py_
             
     
 @cython.boundscheck(False)   
-def update_cluster_cython(double[:, :, ::1] imageGrid, double[:,:,:, ::1] lcmr, Py_ssize_t[:, ::1] Label, Py_ssize_t length, double[:,::1] areas): 
+def update_cluster_cython(double[:, :, ::1] imageGrid, double[:,:,:, ::1] lcmr, long[:, ::1] Label, int length, double[:,::1] areas): 
     
-    cdef Py_ssize_t bands = imageGrid.shape[2]
-    cdef Py_ssize_t lcmr_bands = lcmr.shape[0]
+    cdef int bands = imageGrid.shape[2]
+    cdef int lcmr_bands = lcmr.shape[0]
     
     # Format for data cluster information will be h,w,L,a,b,n
     cdef double[:, ::1] kvector_info = np.zeros((3+bands,length))    
     cdef double[:, ::1] kvector_number = np.zeros((1,length))    
     cdef double[:, :, ::1] kvector_lcmr = np.zeros((lcmr_bands,lcmr_bands,length))   
     
-    cdef Py_ssize_t i,j,k,locallabel,b_i,ii,jj
+    cdef int i,j,k,locallabel,b_i,ii,jj
         
-    cdef Py_ssize_t height,width
+    cdef int height,width
     cdef double number
     
     height = Label.shape[0]
@@ -224,9 +222,9 @@ def update_cluster_cython(double[:, :, ::1] imageGrid, double[:,:,:, ::1] lcmr, 
 
 # Function to calculate the adaptive search range of each cluster seed
 @cython.boundscheck(False) 
-def find_area_search_limit(Py_ssize_t ch, Py_ssize_t cw , Py_ssize_t S ,double[:,::1] areas ):            
+def find_area_search_limit(int ch, int cw , int S ,double[:,::1] areas ):            
     cdef double area_sum = 0 
-    cdef Py_ssize_t h_min,h_max,w_min,w_max,h,w,height,width
+    cdef int h_min,h_max,w_min,w_max,h,w,height,width
     
     height = areas.shape[0]
     width = areas.shape[1]
@@ -234,10 +232,10 @@ def find_area_search_limit(Py_ssize_t ch, Py_ssize_t cw , Py_ssize_t S ,double[:
                
     
     with nogil:
-        h_min = <Py_ssize_t>max(ch - S, 0)
-        h_max = <Py_ssize_t>min(ch + S + 1, height)
-        w_min = <Py_ssize_t>max(cw - S, 0)
-        w_max = <Py_ssize_t>min(cw + S + 1, width)      
+        h_min = <int>max(ch - S, 0)
+        h_max = <int>min(ch + S + 1, height)
+        w_min = <int>max(cw - S, 0)
+        w_max = <int>min(cw + S + 1, width)      
         
         for h in range(h_min,h_max):
             for w in range(w_min, w_max):
@@ -248,14 +246,14 @@ def find_area_search_limit(Py_ssize_t ch, Py_ssize_t cw , Py_ssize_t S ,double[:
 
 # Cython equivilant of numpy where for clusters 
 @cython.boundscheck(False)
-def where_cluster(Py_ssize_t[: , ::1] labels,Py_ssize_t cluster_number):
-    cdef Py_ssize_t i,j,height,width,ll 
+def where_cluster(long[: , ::1] labels,int cluster_number):
+    cdef int i,j,height,width,ll 
     height = labels.shape[0]
     width = labels.shape[1]   
     
-    cdef Py_ssize_t segement_size = int((40*height*width)/cluster_number)    
-    cdef Py_ssize_t[::1] count = np.zeros((cluster_number),dtype=int)    
-    cdef Py_ssize_t[:,:,::1] positions = np.zeros((cluster_number,segement_size,2),dtype = int)
+    cdef int segement_size = int((40*height*width)/cluster_number)    
+    cdef long[::1] count = np.zeros((cluster_number),dtype=int)    
+    cdef long[:,:,::1] positions = np.zeros((cluster_number,segement_size,2),dtype = int)
     
     
 
@@ -271,16 +269,16 @@ def where_cluster(Py_ssize_t[: , ::1] labels,Py_ssize_t cluster_number):
 
 # Find all the neighbouring unvisited clusters 
 @cython.boundscheck(False)
-def neighbour_search(Py_ssize_t[:,::1] indexs,Py_ssize_t[:,::1] labels,Py_ssize_t[::1] visited,Py_ssize_t S):      
-    cdef Py_ssize_t[::1] dx = np.array((1 , -1 , 0 , 0),dtype = int)
-    cdef Py_ssize_t[::1] dy = np.array((0 , 0 , 1 , -1),dtype = int)       
+def neighbour_search(long[:,::1] indexs,long[:,::1] labels,long[::1] visited,int S):      
+    cdef long[::1] dx = np.array((1 , -1 , 0 , 0),dtype = int)
+    cdef long[::1] dy = np.array((0 , 0 , 1 , -1),dtype = int)       
     cdef int i,j,number,search_i,search_j,s_label,height,width,count,s_i,s_j    
     
     height = labels.shape[0]
     width = labels.shape[1]
     number = indexs.shape[0] 
     count = 0
-    cdef Py_ssize_t[::1] neighbours = -1*np.ones((2*height + 2*width),dtype = int)  
+    cdef long[::1] neighbours = -1*np.ones((2*height + 2*width),dtype = int)  
     
     for i in range(number):
         search_i = indexs[i,0]
@@ -300,8 +298,8 @@ def neighbour_search(Py_ssize_t[:,::1] indexs,Py_ssize_t[:,::1] labels,Py_ssize_
 
 # Calculate area element 
 @cython.boundscheck(False)
-def area_element(double[:,:,::1] image,Py_ssize_t m , Py_ssize_t S):
-    cdef Py_ssize_t height,width,bands,i,j,k    
+def area_element(double[:,:,::1] image,int m , int S):
+    cdef int height,width,bands,i,j,k    
     height = image.shape[0]
     width = image.shape[1]
     bands = image.shape[2]
