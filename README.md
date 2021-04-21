@@ -43,7 +43,7 @@ Or bib format
 # Example terminal input
 To classify Indiana Pines with 20 ground truth labels per class ten times run
 
-> python main.py --dataset=Indian --num-labeled=20 --run-n=10
+> python main.py --dataset=Indiana --num-labeled=20 --run-n=10
 
 
 # Python Version
