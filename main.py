@@ -26,15 +26,15 @@ args = cli.parse_commandline_args()
 if args.dataset == "Indiana":
     args.k = 1200
     args.b = random.uniform(0.89,0.9) 
-    args.gamma = 10**random.uniform(-0.8,-0.6)  
+    args.sigma_l = 10**random.uniform(-0.8,-0.6)  
 elif args.dataset == "Salinas":
     args.k = 1500
     args.b = random.uniform(0.89,0.9) 
-    args.gamma = 10**random.uniform(0.8,1.3)  
+    args.sigma_l = 10**random.uniform(0.8,1.3)  
 elif args.dataset == "PaviaU":
     args.k=2400
     args.b = random.uniform(0.09,0.1) 
-    args.gamma = 10**random.uniform(2.5,3.0)  
+    args.sigma_l = 10**random.uniform(2.5,3.0)  
     
 
 #### Load Hyperspectral Data and Ground Truth
@@ -111,7 +111,7 @@ for t_i in range(args.run_n):
  
   
     ## Graph Propogation 
-    v_2_labels = graphclass.fcf(hms,args.gamma,sigma,args.b,mu,k,node_labels,mean_feature_vector,weighted_feature_vector)
+    v_2_labels = graphclass.fcf(hms,args.sigma_l,sigma,args.b,mu,k,node_labels,mean_feature_vector,weighted_feature_vector)
     [final_accuracy_v_2,final_coverage,final_pixel_number] = pd.initial_accuracy_assessment(ground_truth,hms.Labels,v_2_labels)  
     pro_class = pd.produce_classification(v_2_labels,labels,ground_truth)
     final = time.time()    
