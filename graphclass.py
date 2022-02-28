@@ -188,7 +188,7 @@ def graph_clustering(weight_matrix,test_labels,mu):
 
 
 
-def fcf(hms,gamma,sigma,b,mu,k,node_labels,mean_feature_vector,weighted_feature_vector):    
+def fcf(hms,sigma_l,sigma,b,mu,k,node_labels,mean_feature_vector,weighted_feature_vector):    
 
     cluster_positions = np.zeros((hms.ClusterNumber,2))
     cluster_count = np.zeros((hms.ClusterNumber))
@@ -205,7 +205,7 @@ def fcf(hms,gamma,sigma,b,mu,k,node_labels,mean_feature_vector,weighted_feature_
     
     weight_matrix = mean_weighted_k_graph(hms,weighted_feature_vector,mean_feature_vector,sigma,b,hms.ClusterNumber-1) 
     distances = np.asarray(graph.create_distance_matrix(cluster_positions))       
-    distances_matrix = np.exp(-distances/gamma)   
+    distances_matrix = np.exp(-distances/sigma_l)   
     
     mark_2 = np.multiply(weight_matrix,distances_matrix)
 
